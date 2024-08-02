@@ -35,6 +35,10 @@ public class Employee {
     @JoinColumn(name = "company_id", nullable = false)
     private Company company;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     /*
     CREATE TABLE employee (
        employee_id SERIAL PRIMARY KEY,
