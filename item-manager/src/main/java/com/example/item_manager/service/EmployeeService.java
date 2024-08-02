@@ -9,32 +9,37 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ItemService {
+public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    public Employee createItem(Employee employee) {
+    public Employee createEmployee(Employee employee) {
         return employeeRepository.save(employee);
     }
 
-    public List<Employee> getAllItems() {
+    public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
 
-    public Optional<Employee> getItemById(Long id) {
+    public Optional<Employee> getEmployeeById(Long id) {
         return employeeRepository.findById(id);
     }
 
-    public Employee updateItem(Long id, Employee employeeDetails) {
+    public Employee updateEmployee(Long id, Employee employeeDetails) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
-        employee.setName(employeeDetails.getName());
-        employee.setDescription(employeeDetails.getDescription());
+        employee.setFirst_name(employeeDetails.getFirst_name());
+        employee.setLast_name(employeeDetails.getLast_name());
+        employee.setEmail(employeeDetails.getEmail());
+        employee.setPhone_number(employee.getPhone_number());
+        employee.setJob(employee.getJob());
+        employee.setSalary(employee.getSalary());
+        employee.setCompany(employee.getCompany());
         return employeeRepository.save(employee);
     }
 
-    public void deleteItem(Long id) {
+    public void deleteEmployee(Long id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
         employeeRepository.delete(employee);
