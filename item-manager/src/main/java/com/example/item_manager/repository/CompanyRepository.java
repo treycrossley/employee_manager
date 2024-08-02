@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Long> {
 
-    List<Company> findByName(String name);
+    List<Company> findByCompanyName(String name);
 
 }
