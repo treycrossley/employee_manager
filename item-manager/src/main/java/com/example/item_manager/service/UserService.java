@@ -19,7 +19,7 @@ public class UserService {
             throw new RuntimeException("Username already taken.");
         }
         
-        user.setPassword(passwordEncoder.encode(user.getPassword())); // Hash the password
+        user.setPassword(passwordEncoder.encode(user.getPassword())); 
         return userRepository.save(user);
     }
 
