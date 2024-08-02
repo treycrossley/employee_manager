@@ -17,10 +17,10 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
-    private Long company_id;
+    private Long companyId;
 
     @Column(name = "company_name")
-    private String company_name;
+    private String companyName;
 
     @Column(name = "location")
     private String location;
