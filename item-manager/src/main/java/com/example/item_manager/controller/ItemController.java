@@ -1,6 +1,6 @@
 package com.example.item_manager.controller;
 
-import com.example.item_manager.model.Item;
+import com.example.item_manager.model.Employee;
 import com.example.item_manager.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,19 +17,19 @@ public class ItemController {
 
     // Create a new Item
     @PostMapping
-    public Item createItem(@RequestBody Item item) {
-        return itemService.createItem(item);
+    public Employee createItem(@RequestBody Employee employee) {
+        return itemService.createItem(employee);
     }
 
     // Get all Items
     @GetMapping
-    public List<Item> getAllItems() {
+    public List<Employee> getAllItems() {
         return itemService.getAllItems();
     }
 
     // Get an Item by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Item> getItemById(@PathVariable Long id) {
+    public ResponseEntity<Employee> getItemById(@PathVariable Long id) {
         return itemService.getItemById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -37,8 +37,8 @@ public class ItemController {
 
     // Update an Item
     @PutMapping("/{id}")
-    public ResponseEntity<Item> updateItem(@PathVariable Long id, @RequestBody Item itemDetails) {
-        return ResponseEntity.ok(itemService.updateItem(id, itemDetails));
+    public ResponseEntity<Employee> updateItem(@PathVariable Long id, @RequestBody Employee employeeDetails) {
+        return ResponseEntity.ok(itemService.updateItem(id, employeeDetails));
     }
 
     // Delete an Item
