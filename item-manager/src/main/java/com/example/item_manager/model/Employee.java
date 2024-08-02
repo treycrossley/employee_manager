@@ -2,21 +2,17 @@ package com.example.item_manager.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-
 import java.util.Objects;
 
+@Data
 @Entity
-@Table(name = "employee")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "employee")
 public class Employee {
-
     @Id //makes this a primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="employee_id", updatable = false)
@@ -38,10 +34,10 @@ public class Employee {
     private String jobId;
 
     @Column(name = "salary", nullable = false)
-    private int salary;
+    private double salary;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "fk_company")
+    @JoinColumn(name = "fk_company", nullable = false)
     @JsonBackReference
     private Company company;
 
