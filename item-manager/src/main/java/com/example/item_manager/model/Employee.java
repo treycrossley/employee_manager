@@ -1,38 +1,44 @@
 package com.example.item_manager.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import java.util.Objects;
 
 @Data
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
 @Table(name = "employee")
 public class Employee {
-    @Id
+    @Id //makes this a primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "employee_id", updatable = false)
-    private Long employee_id;
+    @Column(name="employee_id", updatable = false)
+    private int id;
 
-    @Column(name = "first_name", nullable = false)
-    private String first_name;
-    @Column(name = "last_name", nullable = false)
-    private String last_name;
+    @Column(name = "first_name", nullable = false, unique = true)
+    private String firstName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "last_name", nullable = false, unique = true)
+    private String lastName;
+
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+
     @Column(name = "phone_number", nullable = false)
-    private String phone_number;
+    private String phoneNumber;
 
     @Column(name = "job_id", nullable = false)
-    private String job;
-    @Column(nullable = false, columnDefinition = "numeric(10,2)")
+    private String jobId;
+
+    @Column(name = "salary", nullable = false)
     private double salary;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "company_id", nullable = false)
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "fk_company", nullable = false)
+    @JsonBackReference
     private Company company;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -53,4 +59,37 @@ public class Employee {
            FOREIGN KEY(company_id)
            REFERENCES company(company_id)
     );*/
+  
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Employee employee = (Employee) o;
+        return id == employee.id &&
+                salary == employee.salary &&
+                Objects.equals(firstName, employee.firstName) &&
+                Objects.equals(lastName, employee.lastName) &&
+                Objects.equals(email, employee.email) &&
+                Objects.equals(phoneNumber, employee.phoneNumber) &&
+                Objects.equals(jobId, employee.jobId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, email, phoneNumber, jobId, salary);
+    }
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", jobId='" + jobId + '\'' +
+                ", salary=" + salary +
+                ", company=" + company +
+                '}';
+    }
 }
