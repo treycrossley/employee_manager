@@ -1,5 +1,6 @@
 package com.example.item_manager.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,21 +14,20 @@ import java.util.Set;
 @Entity
 @Table(name = "company")
 public class Company {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
-    private Long company_id;
+    private Long companyId;
 
     @Column(name = "company_name")
-    private String company_name;
+    private String companyName;
 
     @Column(name = "location")
     private String location;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonBackReference
     private Set<Employee> employees;
-
     /*
     CREATE TABLE company (
     company_id SERIAL PRIMARY KEY,

@@ -29,11 +29,11 @@ public class EmployeeService {
     public Employee updateEmployee(Long id, Employee employeeDetails) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
-        employee.setFirst_name(employeeDetails.getFirst_name());
-        employee.setLast_name(employeeDetails.getLast_name());
+        employee.setFirstName(employeeDetails.getFirstName());
+        employee.setLastName(employeeDetails.getLastName());
         employee.setEmail(employeeDetails.getEmail());
-        employee.setPhone_number(employee.getPhone_number());
-        employee.setJob(employee.getJob());
+        employee.setPhoneNumber(employee.getPhoneNumber());
+        employee.setJobId(employee.getJobId());
         employee.setSalary(employee.getSalary());
         employee.setCompany(employee.getCompany());
         return employeeRepository.save(employee);
