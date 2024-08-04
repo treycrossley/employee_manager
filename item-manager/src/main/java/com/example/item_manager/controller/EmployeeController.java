@@ -22,8 +22,8 @@ public class EmployeeController {
 
     // Create a new Employee
     @PostMapping
-    public Employee createEmployee(@RequestBody Employee employee) {
-        return employeeService.createEmployee(employee);
+    public Employee createEmployee(@PathVariable long id, @RequestBody Employee employee) {
+        return employeeService.createEmployee(id, employee);
     }
 
     // Get all Employees
