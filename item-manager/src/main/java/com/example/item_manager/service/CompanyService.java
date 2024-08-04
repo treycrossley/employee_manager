@@ -30,7 +30,7 @@ public class CompanyService {
     }
     
     public List<Company> getCompanyByName(String companyName){
-        return CompanyRepository.findCompanyByName(companyName);
+        return CompanyRepository.findByName(companyName);
     }
 
     public List<Company> getCompanyByLocation(String location){
@@ -40,7 +40,7 @@ public class CompanyService {
     public Company updateCompany(Long id, Company CompanyDetails) {
         Company Company = CompanyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
-        Company.setCompanyName(CompanyDetails.getCompanyName());
+        Company.setName(CompanyDetails.getName());
         Company.setLocation(CompanyDetails.getLocation());
         return CompanyRepository.save(Company);
     }
