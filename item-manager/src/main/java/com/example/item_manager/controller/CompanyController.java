@@ -15,6 +15,12 @@ public class CompanyController {
     @Autowired
     private CompanyService CompanyService;
 
+    // @param companyService a companyService bean that will be autowired in from the Spring IOC container.
+    @Autowired
+    public CompanyController(CompanyService companyService){
+        this.CompanyService = companyService;
+    }
+
     // Create a new company
     @PostMapping
     public Company createCompany(@RequestBody Company Company) {
@@ -33,6 +39,18 @@ public class CompanyController {
         return CompanyService.getCompanyById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // Get a company by Name
+    @GetMapping(value = "company", params = {"companyName"})
+    public List<Company> getCompanyByName(@RequestParam("companyName") String companyName){
+        return CompanyService.getCompanyByName(companyName);
+    }
+
+    // Get a company by Location
+    @GetMapping(value = "company", params = {"location"})
+    public List<Company> getCompanyByLocation(@RequestParam("location") String location){
+        return CompanyService.getCompanyByLocation(location);
     }
 
     // Update a company

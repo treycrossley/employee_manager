@@ -14,7 +14,7 @@ public class CompanyService {
   
     @Autowired
     public CompanyService(CompanyRepository companyRepository){
-        this.companyRepository = companyRepository;
+        this.CompanyRepository = companyRepository;
     }
     
     public Company createCompany(Company Company) {
@@ -30,11 +30,11 @@ public class CompanyService {
     }
     
     public List<Company> getCompanyByName(String companyName){
-        return companyRepository.findCompanyByName(companyName);
+        return CompanyRepository.findCompanyByName(companyName);
     }
 
-    public List<Company> getCompaniesByLocation(String location){
-        return companyRepository.findCompanyByLocation(location);
+    public List<Company> getCompanyByLocation(String location){
+        return CompanyRepository.findCompanyByLocation(location);
     }
 
     public Company updateCompany(Long id, Company CompanyDetails) {

@@ -14,7 +14,7 @@ public class Employee {
     @Id //makes this a primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="employee_id", updatable = false)
-    private int id;
+    private Long id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -44,7 +44,7 @@ public class Employee {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Employee employee = (Employee) o;
-        return id == employee.id &&
+        return Objects.equals(id, employee.id) &&
                 salary == employee.salary &&
                 Objects.equals(firstName, employee.firstName) &&
                 Objects.equals(lastName, employee.lastName) &&
