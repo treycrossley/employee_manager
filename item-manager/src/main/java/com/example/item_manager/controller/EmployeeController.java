@@ -15,6 +15,11 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
 
+    @Autowired
+    public EmployeeController(EmployeeService employeeService){
+        this.employeeService = employeeService;
+    }
+
     // Create a new Employee
     @PostMapping
     public Employee createEmployee(@RequestBody Employee employee) {
