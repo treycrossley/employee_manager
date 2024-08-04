@@ -30,7 +30,7 @@ public class CompanyService {
     }
     
     public List<Company> getCompanyByName(String companyName){
-        return CompanyRepository.findByName(companyName);
+        return CompanyRepository.findCompanyByName(companyName);
     }
 
     public List<Company> getCompanyByLocation(String location){
