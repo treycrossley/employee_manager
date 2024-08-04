@@ -31,8 +31,8 @@ public class Employee {
     @Column(name = "job_id", nullable = false)
     private String jobId;
 
-    @Column(name = "salary", nullable = false)
-    private double salary;
+    @Column(name = "salary", columnDefinition = "numeric(10,2)", nullable = false)
+    private float salary;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id", nullable = false)
