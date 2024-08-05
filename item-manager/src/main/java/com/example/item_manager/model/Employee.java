@@ -1,5 +1,6 @@
 package com.example.item_manager.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,6 +42,7 @@ public class Employee {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     /*

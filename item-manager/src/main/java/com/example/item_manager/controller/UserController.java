@@ -15,6 +15,10 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
         User savedUser = userService.save(user);

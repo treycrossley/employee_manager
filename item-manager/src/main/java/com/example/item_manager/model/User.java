@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -21,5 +23,6 @@ public class User {
     private String password;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<Employee> employees = new ArrayList<>();
 }
