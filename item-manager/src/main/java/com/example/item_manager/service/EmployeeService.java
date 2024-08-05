@@ -36,7 +36,6 @@ public class EmployeeService {
         } else {
             throw new RuntimeException("Company ID must be provided.");
         }
-
         return employeeRepository.save(employee);
     }
 
