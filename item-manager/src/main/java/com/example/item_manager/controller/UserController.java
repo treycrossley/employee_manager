@@ -16,10 +16,12 @@ public class UserController {
 
     private final UserService userService;
     private final JwtUtil jwtUtil;
+    private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, JwtUtil jwtUtil) {
+    public UserController(UserService userService, JwtUtil jwtUtil, BCryptPasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/register")
@@ -39,9 +41,7 @@ public class UserController {
     public ResponseEntity<String> loginUser(@RequestBody User user) {
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
 
-        if (existingUser.isEmpty()
-                ||
-                !new BCryptPasswordEncoder().matches(user.getPassword(), existingUser.get().getPassword())) {
+        if (existingUser.isEmpty() || !passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
 
