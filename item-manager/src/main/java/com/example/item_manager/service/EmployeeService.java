@@ -1,6 +1,8 @@
 package com.example.item_manager.service;
 
 import com.example.item_manager.model.Employee;
+import com.example.item_manager.model.Company;
+import com.example.item_manager.repository.CompanyRepository;
 import com.example.item_manager.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,8 +15,16 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+    private CompanyRepository companyRepository;
 
-    public Employee createEmployee(Employee employee) {
+    public EmployeeService(EmployeeRepository employeeRepository, CompanyRepository companyRepository){
+        this.employeeRepository = employeeRepository;
+        this.companyRepository = companyRepository;
+    }
+
+    public Employee createEmployee(Long companyID, Employee employee) {
+        Company c = companyRepository.findById(companyID).get();
+        c.getEmployees().add(employee);
         return employeeRepository.save(employee);
     }
 
