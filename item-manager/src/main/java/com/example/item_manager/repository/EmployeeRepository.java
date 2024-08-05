@@ -1,6 +1,7 @@
 package com.example.item_manager.repository;
 
 import com.example.item_manager.model.Employee;
+import com.example.item_manager.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,4 +12,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     List<Employee> findByFirstName(String first_name);
 
+    List<Employee> findByUser(User user);
 }
