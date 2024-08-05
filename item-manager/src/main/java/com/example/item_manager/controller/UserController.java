@@ -2,9 +2,10 @@ package com.example.item_manager.controller;
 
 import com.example.item_manager.model.User;
 import com.example.item_manager.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.item_manager.util.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -13,11 +14,12 @@ import java.util.Optional;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+    private final JwtUtil jwtUtil;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JwtUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/register")
@@ -31,6 +33,20 @@ public class UserController {
                 savedUser.getUsername());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody User user) {
+        Optional<User> existingUser = userService.findByUsername(user.getUsername());
+
+        if (existingUser.isEmpty()
+                ||
+                !new BCryptPasswordEncoder().matches(user.getPassword(), existingUser.get().getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+        }
+
+        String token = jwtUtil.generateToken(existingUser.get().getUsername());
+        return ResponseEntity.ok("Bearer " + token);
     }
 
     @GetMapping("/{id}")
