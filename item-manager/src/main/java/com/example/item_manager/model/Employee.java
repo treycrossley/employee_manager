@@ -44,6 +44,10 @@ public class Employee {
     @JsonBackReference(value = "user-employee")
     private User user;
 
+    public Long getCompanyId() {
+        return company != null ? company.getCompanyId() : null;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

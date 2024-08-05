@@ -39,7 +39,6 @@ public class JwtUtil {
     }
 
     public Claims decodeJWT(String token) {
-        System.out.println(secretKey);
         try {
             return Jwts.parserBuilder()
                     .setSigningKey(Keys.hmacShaKeyFor(Base64.getDecoder().decode(secretKey)))

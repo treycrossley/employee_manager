@@ -1,8 +1,10 @@
 package com.example.item_manager.service;
 
+import com.example.item_manager.model.Company;
 import com.example.item_manager.model.Employee;
 import com.example.item_manager.model.User;
 import com.example.item_manager.repository.EmployeeRepository;
+import com.example.item_manager.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +18,25 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
-    
+
+    @Autowired
+    private CompanyRepository companyRepository;
+
     @Autowired
     private UserService userService;
 
     public Employee createEmployee(Employee employee) {
         User user = userService.getCurrentUser();
         employee.setUser(user);
+        Long companyId = employee.getCompanyId();
+        if (companyId != null) {
+            Company company = companyRepository.findById(companyId)
+                    .orElseThrow(() -> new RuntimeException("Company not found")); // Handle case where company is not
+                                                                                   // found
+            employee.setCompany(company); // Set the company on the employee
+        } else {
+            throw new RuntimeException("Company ID must be provided.");
+        }
         return employeeRepository.save(employee);
     }
 

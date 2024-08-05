@@ -28,11 +28,4 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "company-employees")
     private Set<Employee> employees;
-    /*
-    CREATE TABLE company (
-    company_id SERIAL PRIMARY KEY,
-    company_name VARCHAR(100) NOT NULL,
-    location VARCHAR(100)
-    );
-    */
 }
