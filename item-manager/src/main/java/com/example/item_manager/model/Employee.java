@@ -14,7 +14,7 @@ public class Employee {
     @Id //makes this a primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="employee_id", updatable = false)
-    private int id;
+    private Long id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;

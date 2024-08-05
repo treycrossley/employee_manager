@@ -1,10 +1,12 @@
 package com.example.item_manager.service;
 
 import com.example.item_manager.model.Employee;
+import com.example.item_manager.model.User;
 import com.example.item_manager.repository.EmployeeRepository;
-import com.example.item_manager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import jakarta.persistence.EntityNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,9 +20,9 @@ public class EmployeeService {
     @Autowired
     private UserService userService;
 
-     public Employee createEmployee(Employee employee, Long userId) {
-        User user = userService.getUserById(userId); 
-        employee.setUser(user); 
+    public Employee createEmployee(Employee employee) {
+        User user = userService.getCurrentUser();
+        employee.setUser(user);
         return employeeRepository.save(employee);
     }
 
@@ -42,9 +44,9 @@ public class EmployeeService {
         employee.setJobId(employee.getJobId());
         employee.setSalary(employee.getSalary());
         employee.setCompany(employee.getCompany());
-        if (userId != null) {
-            User user = userService.getUserById(userId);
-            employee.setUser(user);
+        User currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            employee.setUser(currentUser);
         }
         return employeeRepository.save(employee);
     }
