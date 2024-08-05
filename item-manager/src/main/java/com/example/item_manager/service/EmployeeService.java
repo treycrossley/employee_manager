@@ -31,12 +31,12 @@ public class EmployeeService {
         Long companyId = employee.getCompanyId();
         if (companyId != null) {
             Company company = companyRepository.findById(companyId)
-                    .orElseThrow(() -> new RuntimeException("Company not found")); // Handle case where company is not
-                                                                                   // found
-            employee.setCompany(company); // Set the company on the employee
+                    .orElseThrow(() -> new RuntimeException("Company not found"));
+            employee.setCompany(company);
         } else {
             throw new RuntimeException("Company ID must be provided.");
         }
+
         return employeeRepository.save(employee);
     }
 

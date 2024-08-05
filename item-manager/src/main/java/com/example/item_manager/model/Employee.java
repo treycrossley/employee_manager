@@ -44,9 +44,8 @@ public class Employee {
     @JsonBackReference(value = "user-employee")
     private User user;
 
-    public Long getCompanyId() {
-        return company != null ? company.getCompanyId() : null;
-    }
+    @Transient
+    private Long companyId; // This is for incoming company ID from JSON
 
     @Override
     public boolean equals(Object o) {
