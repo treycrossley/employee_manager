@@ -44,21 +44,6 @@ public class Employee {
     @JsonBackReference(value = "user-employee")
     private User user;
 
-    /*
-    CREATE TABLE employee (
-       employee_id SERIAL PRIMARY KEY,
-       first_name VARCHAR(50) NOT NULL,
-       last_name VARCHAR(50) NOT NULL,
-       email VARCHAR(100) NOT NULL UNIQUE,
-       phone_number VARCHAR(20),
-       job_id VARCHAR(10) NOT NULL,
-       salary NUMERIC(10, 2) NOT NULL,
-       company_id INT,
-       CONSTRAINT fk_company
-           FOREIGN KEY(company_id)
-           REFERENCES company(company_id)
-    );*/
-  
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

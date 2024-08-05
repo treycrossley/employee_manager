@@ -59,6 +59,18 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public String updateUserRole(Long userId, String role) {
+        if (!role.equals("ADMIN") && !role.equals("USER")) {
+            return "Invalid role. Use 'ADMIN' or 'USER'.";
+        }
+
+        return userRepository.findById(userId).map(user -> {
+            user.setRole(role);
+            userRepository.save(user);
+            return "User role updated successfully.";
+        }).orElse("User not found.");
+    }
+
     public void changePassword(Long id, String newPassword) {
         User user = getUserById(id);
         user.setPassword(passwordEncoder.encode(newPassword));

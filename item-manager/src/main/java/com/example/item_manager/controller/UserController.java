@@ -5,7 +5,7 @@ import com.example.item_manager.service.UserService;
 import com.example.item_manager.util.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -16,9 +16,9 @@ public class UserController {
 
     private final UserService userService;
     private final JwtUtil jwtUtil;
-    private final BCryptPasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService, JwtUtil jwtUtil, BCryptPasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, JwtUtil jwtUtil, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
@@ -28,11 +28,16 @@ public class UserController {
     public ResponseEntity<String> registerUser(@RequestBody User user) {
         if (userService.existsByUsername(user.getUsername()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+        if (user.getRole() == null || user.getRole().isEmpty())
+            user.setRole("USER"); // Default role
 
         User savedUser = userService.save(user);
-        String responseMessage = String.format("User registered successfully: {\"id\": %d, \"username\": \"%s\"}",
+
+                String responseMessage = String.format(
+                "User registered successfully: {\"id\": %d, \"username\": \"%s\", \"role\": \"%s\"}",
                 savedUser.getId(),
-                savedUser.getUsername());
+                savedUser.getUsername(),
+                savedUser.getRole());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
@@ -41,11 +46,16 @@ public class UserController {
     public ResponseEntity<String> loginUser(@RequestBody User user) {
         Optional<User> existingUser = userService.findByUsername(user.getUsername());
 
-        if (existingUser.isEmpty() || !passwordEncoder.matches(user.getPassword(), existingUser.get().getPassword())) {
+        if (existingUser.isEmpty())
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
+
+        // Retrieve the stored encoded password
+        String storedEncodedPassword = existingUser.get().getPassword();
+        if (!passwordEncoder.matches(user.getPassword(), storedEncodedPassword)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password");
         }
 
-        String token = jwtUtil.generateToken(existingUser.get().getUsername());
+        String token = jwtUtil.generateToken(existingUser.get().getUsername(), existingUser.get().getRole());
         return ResponseEntity.ok("Bearer " + token);
     }
 
@@ -71,5 +81,18 @@ public class UserController {
     public ResponseEntity<User> getUserByUsername(@PathVariable String username) {
         Optional<User> user = userService.findByUsername(username);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @PutMapping("/{userId}/role")
+    public ResponseEntity<String> updateUserRole(@PathVariable Long userId, @RequestParam String role) {
+        String result = userService.updateUserRole(userId, role);
+
+        if (result.equals("User role updated successfully.")) {
+            return ResponseEntity.ok(result);
+        } else if (result.equals("User not found.")) {
+            return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.badRequest().body(result);
+        }
     }
 }

@@ -1,6 +1,6 @@
 
-INSERT INTO users (username, password) VALUES ('testuser', 'testpassword');
-INSERT INTO users (username, password) VALUES ('admin', 'adminpassword');
+INSERT INTO users (username, password, role) VALUES ('testuser', 'testpassword', 'USER');
+INSERT INTO users (username, password, role) VALUES ('admin', 'adminpassword', 'USER');
 
 -- Insert data for Revature
 INSERT INTO company (company_name, location) VALUES ('Revature', 'Reston, VA');
