@@ -21,11 +21,10 @@ public class EmployeeController {
     }
 
     // Create a new Employee
-    @PostMapping
-    public Employee createEmployee(@PathVariable long id, @RequestBody Employee employee) {
+    @PostMapping("/{id}")
+    public Employee createEmployee(@PathVariable Long id, @RequestBody Employee employee) {
         return employeeService.createEmployee(id, employee);
     }
-
     // Get all Employees
     @GetMapping
     public List<Employee> getAllEmployees() {

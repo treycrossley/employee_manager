@@ -1,6 +1,6 @@
 package com.example.item_manager.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.Objects;
@@ -36,7 +36,7 @@ public class Employee {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id", nullable = false)
-    @JsonManagedReference
+    @JsonBackReference
     private Company company;
 
     @Override

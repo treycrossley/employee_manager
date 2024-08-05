@@ -22,7 +22,7 @@ public class EmployeeService {
         this.companyRepository = companyRepository;
     }
 
-    public Employee createEmployee(long companyID, Employee employee) {
+    public Employee createEmployee(Long companyID, Employee employee) {
         Company c = companyRepository.findById(companyID).get();
         c.getEmployees().add(employee);
         return employeeRepository.save(employee);
