@@ -3,6 +3,7 @@ package com.example.item_manager.controller;
 import com.example.item_manager.model.User;
 import com.example.item_manager.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,9 +21,16 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<User> registerUser(@RequestBody User user) {
+    public ResponseEntity<String> registerUser(@RequestBody User user) {
+        if (userService.existsByUsername(user.getUsername()))
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("User already exists");
+
         User savedUser = userService.save(user);
-        return ResponseEntity.ok(savedUser);
+        String responseMessage = String.format("User registered successfully: {\"id\": %d, \"username\": \"%s\"}",
+                savedUser.getId(),
+                savedUser.getUsername());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseMessage);
     }
 
     @GetMapping("/{id}")

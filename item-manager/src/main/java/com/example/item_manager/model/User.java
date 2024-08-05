@@ -3,8 +3,8 @@ package com.example.item_manager.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -23,6 +23,6 @@ public class User {
     private String password;
     
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
-    private List<Employee> employees = new ArrayList<>();
+    @JsonManagedReference(value = "user-employee")
+    private Set<Employee> employees = new HashSet<>();
 }

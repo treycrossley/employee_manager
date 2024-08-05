@@ -25,9 +25,13 @@ public class UserService implements UserDetailsService {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             throw new RuntimeException("Username already taken.");
         }
-        
-        user.setPassword(passwordEncoder.encode(user.getPassword())); 
+
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
+    }
+
+    public boolean existsByUsername(String username) {
+        return userRepository.findByUsername(username).isPresent();
     }
 
     public Optional<User> findByUsername(String username) {

@@ -1,6 +1,8 @@
 package com.example.item_manager.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,7 +28,7 @@ public class Company {
     private String location;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonBackReference
+    @JsonManagedReference(value = "company-employees")
     private Set<Employee> employees;
     /*
     CREATE TABLE company (
