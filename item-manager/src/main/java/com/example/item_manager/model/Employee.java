@@ -36,7 +36,6 @@ public class Employee {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id", nullable = false)
-    @JsonManagedReference
     private Company company;
 
     @Override
