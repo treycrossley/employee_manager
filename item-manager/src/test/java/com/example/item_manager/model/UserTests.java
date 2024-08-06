@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserTest {
+class UserTests {
 
     private User user;
 
@@ -79,4 +79,35 @@ class UserTest {
                 + user.getCreatedAt() + ", updatedAt=" + user.getUpdatedAt() + ", employees=[]}";
         assertEquals(expected, actualString);
     }
+
+    @Test
+    void testDefaultRole() {
+        User newUser = new User();
+        assertEquals("USER", newUser.getRole()); // Verify that the default role is "USER"
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        assertNotEquals(user, null); // User should not be equal to null
+    }
+
+    @Test
+    void testEqualsWithSameInstance() {
+        assertEquals(user, user); // User should be equal to itself
+    }
+
+    @Test
+    void testEmployeesCollection() {
+        assertTrue(user.getEmployees().isEmpty()); // Ensure employees collection is initially empty
+
+        // Assuming you have an Employee class and its methods to add and remove
+        // employees
+        Employee employee = new Employee();
+        employee.setUser(user); // Set user for the employee
+        user.getEmployees().add(employee); // Add an employee
+
+        assertFalse(user.getEmployees().isEmpty()); // Collection should no longer be empty
+        assertEquals(1, user.getEmployees().size()); // Verify the size of the collection
+    }
+
 }

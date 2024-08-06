@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EmployeeTest {
+class EmployeeTests {
 
     private Employee employee;
     private Company company;
@@ -31,6 +31,48 @@ class EmployeeTest {
         employee.setSalary(60000.0f);
         employee.setCompany(company);
         employee.setUser(user);
+    }
+
+    @Test
+    void testDefaultConstructor() {
+        Employee defaultEmployee = new Employee();
+        assertNull(defaultEmployee.getFirstName());
+        assertNull(defaultEmployee.getLastName());
+        assertNull(defaultEmployee.getEmail());
+        assertNull(defaultEmployee.getPhoneNumber());
+        assertNull(defaultEmployee.getJobId());
+        assertEquals(0.0f, defaultEmployee.getSalary());
+        assertNull(defaultEmployee.getCompany());
+        assertNull(defaultEmployee.getUser());
+    }
+
+    @Test
+    void testEqualsWithNull() {
+        assertNotEquals(employee, null); // Employee should not be equal to null
+    }
+
+    @Test
+    void testEqualsWithSameInstance() {
+        assertEquals(employee, employee); // Employee should be equal to itself
+    }
+
+    @Test
+    void testNegativeSalary() {
+        employee.setSalary(-5000.0f);
+        assertEquals(-5000.0f, employee.getSalary());
+    }
+
+    @Test
+    void testZeroSalary() {
+        employee.setSalary(0.0f);
+        assertEquals(0.0f, employee.getSalary());
+    }
+
+    @Test
+    void testToStringWithoutCompany() {
+        employee.setCompany(null);
+        String expected = "Employee{id=1, firstName='John', lastName='Doe', email='john.doe@example.com', phoneNumber='555-1234', jobId='IT_PROG', salary=60000.0, company=null}";
+        assertEquals(expected, employee.toString());
     }
 
     @Test
