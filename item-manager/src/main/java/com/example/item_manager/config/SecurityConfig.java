@@ -28,9 +28,13 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        String[] publicEndpoints = { "/api/users/register", "/api/users/login" };
+        String[] adminEndpoints = { "/api/users/*/role" }; // Use wildcard for user ID
+
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                        .requestMatchers(publicEndpoints).permitAll()
+                        .requestMatchers(adminEndpoints).hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults()); // Use Basic Authentication
 

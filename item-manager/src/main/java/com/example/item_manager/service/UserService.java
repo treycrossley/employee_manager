@@ -36,6 +36,21 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username).isPresent();
     }
 
+    public boolean isSameUser(Long id, User user) {
+        return user.getId().equals(id);
+    }
+
+    public boolean isAdmin(User user) {
+        return user.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ADMIN"));
+    }
+
+    public boolean isAdminOrCurrent(Long id, User user) {
+        boolean isSameUser = isSameUser(id, user);
+        boolean isAdmin = isAdmin(user);
+        return isSameUser || isAdmin;
+    }
+
     public Optional<User> findByUsername(String username) {
         return userRepository.findByUsername(username);
     }

@@ -10,6 +10,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
@@ -29,6 +30,9 @@ class UserControllerTests {
 
     @Mock
     private JwtUtil jwtUtil;
+
+    @Mock
+    private Authentication authentication;
 
     @Mock
     private PasswordEncoder passwordEncoder;
@@ -113,13 +117,63 @@ class UserControllerTests {
     }
 
     @Test
-    void testChangePassword() {
-        doNothing().when(userService).changePassword(testUser.getId(), "newPassword");
+    void testChangePasswordAsAdmin() {
+        // Arrange
+        when(authentication.getName()).thenReturn("currentUser");
+        when(userService.findByUsername("currentUser")).thenReturn(Optional.of(testUser));
+        when(userService.isAdminOrCurrent(2L, testUser)).thenReturn(true); // Simulate admin access
 
-        ResponseEntity<User> response = userController.changePassword(testUser.getId(), "newPassword");
+        // Act
+        ResponseEntity<User> response = userController.changePassword(2L, "newPassword", authentication);
 
+        // Assert
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        verify(userService).changePassword(testUser.getId(), "newPassword");
+        verify(userService).changePassword(2L, "newPassword");
+    }
+
+    @Test
+    void testChangePasswordAsUser() {
+        // Arrange
+        when(authentication.getName()).thenReturn("currentUser");
+        when(userService.findByUsername("currentUser")).thenReturn(Optional.of(testUser));
+        when(userService.isAdminOrCurrent(1L, testUser)).thenReturn(true); // Simulate changing own password
+
+        // Act
+        ResponseEntity<User> response = userController.changePassword(1L, "newPassword", authentication);
+
+        // Assert
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        verify(userService).changePassword(1L, "newPassword");
+    }
+
+    @Test
+    void testChangePasswordForbidden() {
+        // Arrange
+        when(authentication.getName()).thenReturn("currentUser");
+        when(userService.findByUsername("currentUser")).thenReturn(Optional.of(testUser));
+        when(userService.isAdminOrCurrent(2L, testUser)).thenReturn(false); // Simulate forbidden access
+
+        // Act
+        ResponseEntity<User> response = userController.changePassword(2L, "newPassword", authentication);
+
+        // Assert
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        verify(userService, never()).changePassword(any(Long.class), any(String.class)); // Ensure password change is
+                                                                                         // not called
+    }
+
+    @Test
+    void testChangePasswordUserNotFound() {
+        // Arrange
+        when(authentication.getName()).thenReturn("unknownUser");
+        when(userService.findByUsername("unknownUser")).thenReturn(Optional.empty()); // Simulate user not found
+
+        // Act & Assert
+        try {
+            userController.changePassword(1L, "newPassword", authentication);
+        } catch (IllegalArgumentException e) {
+            assertEquals("User not found", e.getMessage());
+        }
     }
 
     @Test

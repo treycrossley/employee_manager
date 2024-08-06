@@ -5,6 +5,7 @@ import com.example.item_manager.service.UserService;
 import com.example.item_manager.util.JwtUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -86,9 +87,17 @@ public class UserController {
     }
 
     @PutMapping("/{id}/change-password")
-    public ResponseEntity<User> changePassword(@PathVariable Long id, @RequestBody String newPassword) {
-        userService.changePassword(id, newPassword);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<User> changePassword(@PathVariable Long id, @RequestBody String newPassword,
+            Authentication authentication) {
+        String currentUsername = authentication.getName();
+        Optional<User> currentUser = userService.findByUsername(currentUsername);
+        User user = currentUser.orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        if (userService.isAdminOrCurrent(id, user)) {
+            userService.changePassword(id, newPassword);
+            return ResponseEntity.ok(user);
+        }
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @GetMapping("/username/{username}")
