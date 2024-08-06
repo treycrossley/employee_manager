@@ -5,7 +5,6 @@ import com.example.item_manager.service.UserService;
 import com.example.item_manager.util.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -17,6 +16,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 class UserControllerTests {
@@ -53,7 +53,9 @@ class UserControllerTests {
         ResponseEntity<String> response = userController.registerUser(testUser);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertTrue(response.getBody().contains("User registered successfully"));
+        String responseBody = response.getBody();
+        assertNotNull(responseBody, "Response body should not be null");
+        assertTrue(responseBody.contains("User registered successfully"));
         verify(userService).save(testUser);
     }
 
