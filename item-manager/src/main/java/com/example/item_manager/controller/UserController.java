@@ -1,6 +1,5 @@
 package com.example.item_manager.controller;
 
-import com.example.item_manager.model.Employee;
 import com.example.item_manager.model.User;
 import com.example.item_manager.service.UserService;
 import com.example.item_manager.util.JwtUtil;

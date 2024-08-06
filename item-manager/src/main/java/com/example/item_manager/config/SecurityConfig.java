@@ -34,7 +34,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults()); // Use Basic Authentication
 
-        http.addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class); // Add your RequestFilter
+        http.addFilterBefore(requestFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
