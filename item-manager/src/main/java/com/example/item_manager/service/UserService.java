@@ -1,5 +1,6 @@
 package com.example.item_manager.service;
 
+import com.example.item_manager.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,6 +13,8 @@ import com.example.item_manager.repository.UserRepository;
 import com.example.item_manager.model.User;
 
 import jakarta.persistence.EntityNotFoundException;
+
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -86,5 +89,15 @@ public class UserService implements UserDetailsService {
                 .password(user.getPassword())
                 .authorities("USER") // You can set roles or authorities here
                 .build();
+    }
+
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        userRepository.delete(user);
     }
 }

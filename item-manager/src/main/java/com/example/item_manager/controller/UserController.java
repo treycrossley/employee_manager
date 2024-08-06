@@ -1,5 +1,6 @@
 package com.example.item_manager.controller;
 
+import com.example.item_manager.model.Employee;
 import com.example.item_manager.model.User;
 import com.example.item_manager.service.UserService;
 import com.example.item_manager.util.JwtUtil;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -22,6 +24,19 @@ public class UserController {
         this.userService = userService;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
+    }
+
+    // Get all Users
+    @GetMapping
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    // Delete a User
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEmployee(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/register")
