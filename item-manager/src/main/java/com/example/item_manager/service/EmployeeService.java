@@ -22,7 +22,7 @@ public class EmployeeService {
         this.companyRepository = companyRepository;
     }
 
-    public Employee createEmployee(Long companyID, Employee employee) {
+    public Employee createEmployee(int companyID, Employee employee) {
         Company c = companyRepository.findById(companyID).get();
         c.getEmployees().add(employee);
         return employeeRepository.save(employee);
@@ -32,24 +32,24 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Optional<Employee> getEmployeeById(Long id) {
+    public Optional<Employee> getEmployeeById(int id) {
         return employeeRepository.findById(id);
     }
 
-    public Employee updateEmployee(Long id, Employee employeeDetails) {
+    public Employee updateEmployee(int id, Employee employeeDetails) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
         employee.setFirstName(employeeDetails.getFirstName());
         employee.setLastName(employeeDetails.getLastName());
         employee.setEmail(employeeDetails.getEmail());
-        employee.setPhoneNumber(employee.getPhoneNumber());
-        employee.setJobId(employee.getJobId());
-        employee.setSalary(employee.getSalary());
-        employee.setCompany(employee.getCompany());
+        employee.setPhoneNumber(employeeDetails.getPhoneNumber());
+        employee.setJobId(employeeDetails.getJobId());
+        employee.setSalary(employeeDetails.getSalary());
+        employee.setCompany(employeeDetails.getCompany());
         return employeeRepository.save(employee);
     }
 
-    public void deleteEmployee(Long id) {
+    public void deleteEmployee(int id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
         employeeRepository.delete(employee);
