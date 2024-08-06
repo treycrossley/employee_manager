@@ -21,10 +21,10 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     @Autowired
-    private UserService userService;
+    protected UserService userService;
 
     @Autowired
-    private RequestFilter requestFilter;
+    protected RequestFilter requestFilter;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
