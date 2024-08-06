@@ -26,7 +26,7 @@ public class DataInitializer implements ApplicationRunner {
         initializeEmployees();
     }
 
-    private void initializeUsers() {
+    void initializeUsers() {
         String registerUrl = "http://localhost:8080/api/users/register";
 
         // User data for registration
@@ -49,7 +49,7 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
-    private void loginAdminUser() {
+    void loginAdminUser() {
         String loginUrl = "http://localhost:8080/api/users/login";
 
         // Admin user login data
@@ -76,7 +76,7 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
-    private void initializeCompanies() {
+    void initializeCompanies() {
         String createCompanyUrl = "http://localhost:8080/api/companies";
 
         // Company data for insertion
@@ -96,7 +96,7 @@ public class DataInitializer implements ApplicationRunner {
         }
     }
 
-    private void initializeEmployees() {
+    void initializeEmployees() {
         String createEmployeeUrl = "http://localhost:8080/api/employees";
 
         // Employee data for insertion
