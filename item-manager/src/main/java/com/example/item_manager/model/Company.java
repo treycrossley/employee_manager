@@ -28,4 +28,14 @@ public class Company {
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference(value = "company-employees")
     private Set<Employee> employees;
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "companyId=" + companyId +
+                ", name='" + name + '\'' +
+                ", location='" + location + '\'' +
+                ", employees=" + employees +
+                '}';
+    }
 }
