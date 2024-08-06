@@ -3,6 +3,8 @@ package com.example.item_manager.service;
 import com.example.item_manager.model.Company;
 import com.example.item_manager.model.Employee;
 import com.example.item_manager.model.User;
+import com.example.item_manager.model.Company;
+import com.example.item_manager.repository.CompanyRepository;
 import com.example.item_manager.repository.EmployeeRepository;
 import com.example.item_manager.repository.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
