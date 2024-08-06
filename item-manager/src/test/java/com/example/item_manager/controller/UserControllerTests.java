@@ -98,10 +98,14 @@ class UserControllerTests {
 
     @Test
     void testGetUserById() {
+        // Mocking the behavior of userService to return the test user
+        when(userService.findByUsername(authentication.getName())).thenReturn(Optional.of(testUser));
         when(userService.getUserById(testUser.getId())).thenReturn(testUser);
 
-        ResponseEntity<User> response = userController.getUserById(testUser.getId());
+        // Invoke the method under test
+        ResponseEntity<User> response = userController.getUserById(testUser.getId(), authentication);
 
+        // Verify the response
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(testUser, response.getBody());
     }
@@ -110,7 +114,10 @@ class UserControllerTests {
     void testUpdateUser() {
         doNothing().when(userService).updateUser(testUser.getId(), testUser);
 
-        ResponseEntity<User> response = userController.updateUser(testUser.getId(), testUser);
+        when(authentication.getName()).thenReturn(testUser.getUsername());
+        when(userService.findByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
+
+        ResponseEntity<User> response = userController.updateUser(testUser.getId(), testUser, authentication);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         verify(userService).updateUser(testUser.getId(), testUser);
@@ -179,8 +186,10 @@ class UserControllerTests {
     @Test
     void testGetUserByUsername() {
         when(userService.findByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
+        when(authentication.getName()).thenReturn(testUser.getUsername());
+        when(userService.findByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
 
-        ResponseEntity<User> response = userController.getUserByUsername(testUser.getUsername());
+        ResponseEntity<User> response = userController.getUserByUsername(testUser.getUsername(), authentication);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(testUser, response.getBody());
@@ -188,10 +197,19 @@ class UserControllerTests {
 
     @Test
     void testGetUserByUsername_NotFound() {
-        when(userService.findByUsername(testUser.getUsername())).thenReturn(Optional.empty());
+        when(authentication.getName()).thenReturn(testUser.getUsername());
+        when(userService.findByUsername(testUser.getUsername())).thenReturn(Optional.of(testUser));
 
-        ResponseEntity<User> response = userController.getUserByUsername(testUser.getUsername());
+        String nonExistentUsername = "nonexistentUser";
+        when(userService.findByUsername(nonExistentUsername)).thenReturn(Optional.empty());
 
+        ResponseEntity<User> response;
+        try {
+            response = userController.getUserByUsername(nonExistentUsername, authentication);
+        } catch (IllegalArgumentException e) {
+            assertEquals("User not found", e.getMessage());
+            return;
+        }
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
