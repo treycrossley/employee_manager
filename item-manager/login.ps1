@@ -18,11 +18,9 @@ if ($REGISTER_RESPONSE -like "*User already exists*") {
 Write-Host "Logging in user..."
 $LOGIN_RESPONSE = Invoke-RestMethod -Uri $LOGIN_URL -Method Post -ContentType "application/json" -Body $JSON_PAYLOAD
 
-# Extract the token from the login response
-$BEARER_TOKEN = $LOGIN_RESPONSE.token
-
-# Output the bearer token
-if (-not [string]::IsNullOrEmpty($BEARER_TOKEN)) {
+# If the login response is just a plain string token
+if ($LOGIN_RESPONSE -and $LOGIN_RESPONSE -ne "") {
+    $BEARER_TOKEN = $LOGIN_RESPONSE
     Write-Host "Bearer token: Bearer $BEARER_TOKEN"
 } else {
     Write-Host "Failed to retrieve bearer token. Login response: $LOGIN_RESPONSE"
