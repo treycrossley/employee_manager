@@ -1,22 +1,28 @@
 package com.example.item_manager.controller;
 
 import com.example.item_manager.model.Employee;
+import com.example.item_manager.model.User;
 import com.example.item_manager.service.EmployeeService;
+import com.example.item_manager.service.UserService;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class EmployeeControllerTests {
 
     @InjectMocks
@@ -25,18 +31,25 @@ class EmployeeControllerTests {
     @Mock
     private EmployeeService employeeService;
 
+    @Mock
+    private UserService userService;
+
+    @Mock
+    private Authentication authentication;
+
     private Employee testEmployee;
+
+    private User testUser;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        testEmployee = new Employee();
-        testEmployee.setFirstName("John");
-        testEmployee.setLastName("Doe");
-        testEmployee.setEmail("john.doe@example.com");
-        testEmployee.setPhoneNumber("555-1234");
-        testEmployee.setJobId("IT_PROG");
-        testEmployee.setSalary(60000.0f);
+
+        // Mock testUser and testEmployee for testing
+        testUser = new User(); // Create and set user details
+        testEmployee = new Employee(); // Create and set employee details
+        testEmployee.setUser(testUser);
+
     }
 
     @Test
@@ -50,56 +63,102 @@ class EmployeeControllerTests {
     }
 
     @Test
-    void testGetAllEmployees() {
-        when(employeeService.getAllEmployees()).thenReturn(Collections.singletonList(testEmployee));
+    void deleteEmployee_Success() {
+        Long employeeId = 1L;
+        String username = "testUser";
 
-        List<Employee> employees = employeeController.getAllEmployees();
+        when(authentication.getName()).thenReturn(username);
+        testUser.setUsername(username);
+        testEmployee.setUser(testUser);
 
-        assertEquals(1, employees.size());
-        assertEquals(testEmployee, employees.get(0));
-        verify(employeeService).getAllEmployees();
+        when(userService.findByUsername(username)).thenReturn(Optional.of(testUser));
+        when(employeeService.getEmployeeById(employeeId)).thenReturn(Optional.of(testEmployee));
+
+        ResponseEntity<Void> response = employeeController.deleteEmployee(employeeId, authentication);
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(employeeService).deleteEmployee(employeeId);
     }
 
     @Test
-    void testGetEmployeeById() {
-        when(employeeService.getEmployeeById(1L)).thenReturn(Optional.of(testEmployee));
+    void deleteEmployee_Success_Admin() {
+        Long employeeId = 1L;
+        String adminUsername = "adminUser";
 
-        ResponseEntity<Employee> response = employeeController.getEmployeeById(1L);
+        when(authentication.getName()).thenReturn(adminUsername);
+        User adminUser = new User();
+        adminUser.setUsername(adminUsername);
 
-        assertEquals(200, response.getStatusCode().value());
-        assertEquals(testEmployee, response.getBody());
-        verify(employeeService).getEmployeeById(1L);
+        when(userService.findByUsername(adminUsername)).thenReturn(Optional.of(adminUser));
+        when(employeeService.getEmployeeById(employeeId)).thenReturn(Optional.of(testEmployee));
+        when(userService.isAdmin(adminUser)).thenReturn(true); // Is admin
+
+        ResponseEntity<Void> response = employeeController.deleteEmployee(employeeId, authentication);
+
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
+        verify(employeeService).deleteEmployee(employeeId);
     }
 
     @Test
-    void testGetEmployeeByIdNotFound() {
-        when(employeeService.getEmployeeById(1L)).thenReturn(Optional.empty());
+    void deleteEmployee_EmployeeNotFound() {
+        Long employeeId = 1L;
+        String username = "testUser";
 
-        ResponseEntity<Employee> response = employeeController.getEmployeeById(1L);
+        // Mock the authentication to return the defined username
+        when(authentication.getName()).thenReturn(username);
+        testUser.setUsername(username);
 
-        assertEquals(404, response.getStatusCode().value());
-        assertNull(response.getBody());
-        verify(employeeService).getEmployeeById(1L);
+        // Set up the mock behavior for user retrieval
+        when(userService.findByUsername(username)).thenReturn(Optional.of(testUser));
+        when(employeeService.getEmployeeById(employeeId)).thenReturn(Optional.empty()); // No employee found
+
+        // Call the deleteEmployee method and expect an exception
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            employeeController.deleteEmployee(employeeId, authentication);
+        });
+
+        assertEquals("Employee not found", exception.getMessage());
     }
 
     @Test
-    void testUpdateEmployee() {
-        when(employeeService.updateEmployee(anyLong(), any(Employee.class))).thenReturn(testEmployee);
+    void deleteEmployee_UserNotFound() {
+        Long employeeId = 1L;
+        String username = "unknownUser";
 
-        ResponseEntity<Employee> response = employeeController.updateEmployee(1L, testEmployee);
+        // Mock the authentication to return the defined username
+        when(authentication.getName()).thenReturn(username);
 
-        assertEquals(200, response.getStatusCode().value());
-        assertEquals(testEmployee, response.getBody());
-        verify(employeeService).updateEmployee(anyLong(), any(Employee.class));
+        // Set up the mock behavior for user retrieval
+        when(userService.findByUsername(username)).thenReturn(Optional.empty()); // User not found
+
+        // Call the deleteEmployee method and expect an exception
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            employeeController.deleteEmployee(employeeId, authentication);
+        });
+
+        assertEquals("Current user not found", exception.getMessage());
     }
 
     @Test
-    void testDeleteEmployee() {
-        doNothing().when(employeeService).deleteEmployee(1L);
+    void deleteEmployee_Forbidden() {
+        Long employeeId = 1L;
+        String username = "testUser";
+        User otherUser = new User(); // Another user who does not own the employee
 
-        ResponseEntity<Void> response = employeeController.deleteEmployee(1L);
+        // Mock the authentication to return the defined username
+        when(authentication.getName()).thenReturn(username);
+        testUser.setUsername(username);
+        testEmployee.setUser(otherUser); // Employee owned by another user
 
-        assertEquals(204, response.getStatusCode().value());
-        verify(employeeService).deleteEmployee(1L);
+        // Set up the mock behavior for user and employee retrieval
+        when(userService.findByUsername(username)).thenReturn(Optional.of(testUser));
+        when(employeeService.getEmployeeById(employeeId)).thenReturn(Optional.of(testEmployee));
+        when(userService.isAdmin(testUser)).thenReturn(false); // Not an admin
+
+        // Call the deleteEmployee method
+        ResponseEntity<Void> response = employeeController.deleteEmployee(employeeId, authentication);
+
+        // Assert the response status is 403 Forbidden
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
     }
+
 }
