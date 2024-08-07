@@ -3,7 +3,7 @@
 # Define the API endpoints and JSON payload
 REGISTER_URL="http://localhost:8080/api/users/register"
 LOGIN_URL="http://localhost:8080/api/users/login"
-JSON_PAYLOAD='{"username": "testadmin4", "password": "1234"}'
+JSON_PAYLOAD='{"username": "testadmin4", "password": "1234", "role": "ADMIN"}'
 
 # Register the user
 echo "Registering user..."

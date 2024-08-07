@@ -47,6 +47,13 @@ public class Employee {
     @Transient
     private Long companyId; // This is for incoming company ID from JSON
 
+    @PostLoad
+    private void postLoad() {
+        if (company != null) {
+            this.companyId = company.getCompanyId();
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

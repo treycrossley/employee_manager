@@ -60,8 +60,12 @@ public class JwtUtil {
     }
 
     public boolean validateToken(String token, User user) {
+        if (token == null || user == null)
+            return false;
         final String username = extractUsername(token);
-        return (username.equals(user.getUsername()) && !isTokenExpired(token));
+        if (username == null || user.getUsername() == null)
+            return false;
+        return username.equals(user.getUsername()) && !isTokenExpired(token);
     }
 
     private boolean isTokenExpired(String token) {
