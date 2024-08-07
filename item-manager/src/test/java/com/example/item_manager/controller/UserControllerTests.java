@@ -1,25 +1,32 @@
 package com.example.item_manager.controller;
 
-import com.example.item_manager.model.User;
-import com.example.item_manager.service.UserService;
-import com.example.item_manager.util.JwtUtil;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Optional;
+import com.example.item_manager.model.User;
+import com.example.item_manager.service.UserService;
+import com.example.item_manager.util.JwtUtil;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
-
+@ExtendWith(MockitoExtension.class)
 class UserControllerTests {
 
     @InjectMocks
@@ -40,8 +47,7 @@ class UserControllerTests {
     private User testUser;
 
     @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    public void setUp() {
         testUser = new User();
         testUser.setId(1L);
         testUser.setUsername("testuser");
@@ -58,6 +64,7 @@ class UserControllerTests {
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         String responseBody = response.getBody();
+        assertNotNull(responseBody);
         assertNotNull(responseBody, "Response body should not be null");
         assertTrue(responseBody.contains("User registered successfully"));
         verify(userService).save(testUser);

@@ -24,7 +24,7 @@ import com.example.item_manager.util.JwtUtil;
 class SecurityConfigTests {
 
     @MockBean
-    private JwtUtil jwtUtil;
+    protected JwtUtil jwtUtil;
 
 
     @Autowired

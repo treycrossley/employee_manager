@@ -47,7 +47,7 @@ class EmployeeControllerTests {
     private Company testCompany;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
 
         testUser = new User();
         testUser.setUsername("testUser");

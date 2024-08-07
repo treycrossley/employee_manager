@@ -12,7 +12,7 @@ class UserTests {
     private User user;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         user = new User();
         user.setId(1L);
         user.setUsername("testuser");

@@ -21,7 +21,7 @@ class UserRepositoryTests {
     private User user;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         user = new User();
         user.setUsername("testuser");
         user.setPassword("password");

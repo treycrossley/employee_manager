@@ -12,7 +12,7 @@ class CompanyTests {
     private Company company;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         company = new Company();
         company.setCompanyId(1L);
         company.setName("Revature");

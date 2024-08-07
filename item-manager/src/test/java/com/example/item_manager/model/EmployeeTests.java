@@ -1,9 +1,10 @@
 package com.example.item_manager.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class EmployeeTests {
 
@@ -12,7 +13,7 @@ class EmployeeTests {
     private User user;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         company = new Company();
         company.setName("Test Company");
 

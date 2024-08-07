@@ -16,12 +16,9 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestTemplate;
 
 @TestPropertySource(properties = {
-        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
-        "spring.datasource.username=sa",
-        "spring.datasource.password=password",
-        "spring.h2.console.enabled=true",
-        "spring.jpa.hibernate.ddl-auto=create-drop",
-        "spring.jpa.show-sql=true"
+                "SPRING_DATASOURCE_URL=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
+                "SPRING_DATASOURCE_USERNAME=sa",
+                "SPRING_DATASOURCE_PASSWORD=password"
 })
 @ExtendWith(MockitoExtension.class)
 class DataInitializerTests {

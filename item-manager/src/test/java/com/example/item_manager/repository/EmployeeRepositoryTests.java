@@ -29,7 +29,7 @@ class EmployeeRepositoryTests {
     private Company testCompany;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         // Create and save a test user
         testUser = new User();
         testUser.setUsername("testuser");
