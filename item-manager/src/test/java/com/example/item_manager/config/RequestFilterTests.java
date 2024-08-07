@@ -1,30 +1,35 @@
 package com.example.item_manager.config;
 
-import com.example.item_manager.model.User;
-import com.example.item_manager.service.UserService;
-import com.example.item_manager.util.JwtUtil;
-import org.junit.jupiter.api.BeforeEach;
+import java.io.PrintWriter;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.example.item_manager.model.User;
+import com.example.item_manager.service.UserService;
+import com.example.item_manager.util.JwtUtil;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.io.PrintWriter;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
-
+@ExtendWith(MockitoExtension.class)
 class RequestFilterTests {
 
     @InjectMocks
@@ -46,12 +51,7 @@ class RequestFilterTests {
     private FilterChain filterChain;
 
     @Mock
-    private PrintWriter writer; // Mock PrintWriter
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+    private PrintWriter writer;
 
     @Test
     void testDoFilterInternal_PublicEndpoint() throws Exception {

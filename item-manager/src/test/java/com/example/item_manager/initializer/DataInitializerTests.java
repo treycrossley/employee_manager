@@ -1,18 +1,29 @@
 package com.example.item_manager.initializer;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.boot.ApplicationArguments;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.client.RestTemplate;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
+@TestPropertySource(properties = {
+        "spring.datasource.url=jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1",
+        "spring.datasource.username=sa",
+        "spring.datasource.password=password",
+        "spring.h2.console.enabled=true",
+        "spring.jpa.hibernate.ddl-auto=create-drop",
+        "spring.jpa.show-sql=true"
+})
+@ExtendWith(MockitoExtension.class)
 class DataInitializerTests {
 
     @InjectMocks
@@ -20,14 +31,6 @@ class DataInitializerTests {
 
     @Mock
     private RestTemplate restTemplate;
-
-    @Mock
-    private ApplicationArguments applicationArguments; // If you need to mock arguments
-
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
 
     @Test
     void testInitializeUsers() {

@@ -1,11 +1,12 @@
 package com.example.item_manager.initializer;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -43,7 +44,7 @@ public class DataInitializer implements ApplicationRunner {
                 HttpEntity<String> request = new HttpEntity<>(user, headers);
                 restTemplate.postForEntity(registerUrl, request, String.class);
                 System.out.println("User registered: " + user);
-            } catch (Exception e) {
+            } catch (RestClientException e) {
                 System.out.println("User already exists or registration failed: " + e.getMessage());
             }
         }
@@ -71,7 +72,7 @@ public class DataInitializer implements ApplicationRunner {
                 bearerToken = token;
                 System.out.println("Admin Bearer token: " + bearerToken);
             }
-        } catch (Exception e) {
+        } catch (RestClientException e) {
             System.out.println("Admin login failed: " + e.getMessage());
         }
     }
@@ -90,8 +91,8 @@ public class DataInitializer implements ApplicationRunner {
 
             HttpEntity<String> request = new HttpEntity<>(companyJson, headers);
             restTemplate.postForEntity(createCompanyUrl, request, String.class);
-            System.out.println("Company created: " + companyJson);
-        } catch (Exception e) {
+            System.out.println(companyJson + "Company created: ");
+        } catch (RestClientException e) {
             System.out.println("Company creation failed: " + e.getMessage());
         }
     }
@@ -117,7 +118,7 @@ public class DataInitializer implements ApplicationRunner {
                 HttpEntity<String> request = new HttpEntity<>(employee, headers);
                 restTemplate.postForEntity(createEmployeeUrl, request, String.class);
                 System.out.println("Employee created: " + employee);
-            } catch (Exception e) {
+            } catch (RestClientException e) {
                 System.out.println("Employee creation failed: " + e.getMessage());
             }
         }

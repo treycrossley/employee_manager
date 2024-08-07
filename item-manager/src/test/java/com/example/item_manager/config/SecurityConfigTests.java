@@ -1,9 +1,6 @@
 package com.example.item_manager.config;
 
-import com.example.item_manager.ItemManagerApplication;
-import com.example.item_manager.service.UserService;
-import com.example.item_manager.util.JwtUtil;
-
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.context.WebApplicationContext;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import com.example.item_manager.ItemManagerApplication;
+import com.example.item_manager.util.JwtUtil;
 
 @SpringBootTest(classes = ItemManagerApplication.class) // Use main application class
 @TestPropertySource(properties = {
@@ -26,10 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class SecurityConfigTests {
 
     @MockBean
-    private UserService userService; // Mock UserService
+    private JwtUtil jwtUtil;
 
-    @MockBean
-    private JwtUtil jwtUtil; // Mock JwtUtil
 
     @Autowired
     private WebApplicationContext context; // Inject the web application context

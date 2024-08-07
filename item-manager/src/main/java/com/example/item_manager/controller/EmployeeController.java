@@ -30,8 +30,9 @@ public class EmployeeController {
     @Autowired
     private UserService userService;
 
-    public EmployeeController(EmployeeService employeeService){
+    public EmployeeController(EmployeeService employeeService, UserService userService) {
         this.employeeService = employeeService;
+        this.userService = userService;
     }
 
     // Create a new Employee
