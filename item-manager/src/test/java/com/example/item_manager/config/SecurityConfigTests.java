@@ -13,6 +13,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.example.item_manager.ItemManagerApplication;
+import com.example.item_manager.initializer.DataInitializer;
 import com.example.item_manager.util.JwtUtil;
 
 @SpringBootTest(classes = ItemManagerApplication.class) // Use main application class
@@ -26,6 +27,8 @@ class SecurityConfigTests {
     @MockBean
     protected JwtUtil jwtUtil;
 
+    @MockBean
+    protected DataInitializer dataInitializer;
 
     @Autowired
     private WebApplicationContext context; // Inject the web application context
