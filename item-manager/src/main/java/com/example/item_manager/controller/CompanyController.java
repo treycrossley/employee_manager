@@ -15,8 +15,6 @@ public class CompanyController {
     @Autowired
     private CompanyService CompanyService;
 
-    // @param companyService a companyService bean that will be autowired in from the Spring IOC container.
-    @Autowired
     public CompanyController(CompanyService companyService){
         this.CompanyService = companyService;
     }
@@ -35,7 +33,7 @@ public class CompanyController {
 
     // Get a company by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Company> getCompanyById(@PathVariable Long id) {
+    public ResponseEntity<Company> getCompanyById(@PathVariable int id) {
         return CompanyService.getCompanyById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -55,13 +53,13 @@ public class CompanyController {
 
     // Update a company
     @PutMapping("/{id}")
-    public ResponseEntity<Company> updateCompany(@PathVariable Long id, @RequestBody Company CompanyDetails) {
+    public ResponseEntity<Company> updateCompany(@PathVariable int id, @RequestBody Company CompanyDetails) {
         return ResponseEntity.ok(CompanyService.updateCompany(id, CompanyDetails));
     }
 
     // Delete a company
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCompany(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteCompany(@PathVariable int id) {
         CompanyService.deleteCompany(id);
         return ResponseEntity.noContent().build();
     }
