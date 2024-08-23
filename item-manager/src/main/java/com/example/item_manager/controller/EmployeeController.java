@@ -36,6 +36,7 @@ public class EmployeeController {
     }
 
     // Create a new Employee
+
     @PostMapping()
     public ResponseEntity<Employee> createEmployee(@RequestBody Employee employee) {
         Employee createdEmployee = employeeService.createEmployee(employee);
@@ -70,6 +71,7 @@ public class EmployeeController {
             return ResponseEntity.ok(employee);
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
     }
 
     // Update an Employee
@@ -87,6 +89,7 @@ public class EmployeeController {
             return ResponseEntity.ok(updatedEmployee);
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
     }
 
     // Delete an Employee
@@ -104,6 +107,7 @@ public class EmployeeController {
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+
     }
 
 }

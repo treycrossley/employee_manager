@@ -36,6 +36,7 @@ public class EmployeeService {
         } else {
             throw new RuntimeException("Company ID must be provided.");
         }
+
         return employeeRepository.save(employee);
     }
 
@@ -43,11 +44,11 @@ public class EmployeeService {
         return employeeRepository.findAll();
     }
 
-    public Optional<Employee> getEmployeeById(Long id) {
+    public Optional<Employee> getEmployeeById(int id) {
         return employeeRepository.findById(id);
     }
 
-    public Employee updateEmployee(Long id, Employee employeeDetails) {
+    public Employee updateEmployee(int id, Employee employeeDetails) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
         employee.setFirstName(employeeDetails.getFirstName());
@@ -61,10 +62,11 @@ public class EmployeeService {
         if (currentUser != null) {
             employee.setUser(currentUser);
         }
+
         return employeeRepository.save(employee);
     }
 
-    public void deleteEmployee(Long id) {
+    public void deleteEmployee(int id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Employee not found"));
         employeeRepository.delete(employee);

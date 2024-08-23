@@ -24,7 +24,7 @@ public class CompanyService {
         return CompanyRepository.findAll();
     }
 
-    public Optional<Company> getCompanyById(Long id) {
+    public Optional<Company> getCompanyById(int id) {
         return CompanyRepository.findById(id);
     }
     
@@ -36,7 +36,7 @@ public class CompanyService {
         return CompanyRepository.findCompanyByLocation(location);
     }
 
-    public Company updateCompany(Long id, Company CompanyDetails) {
+    public Company updateCompany(int id, Company CompanyDetails) {
         Company Company = CompanyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
         Company.setName(CompanyDetails.getName());
@@ -44,7 +44,7 @@ public class CompanyService {
         return CompanyRepository.save(Company);
     }
 
-    public void deleteCompany(Long id) {
+    public void deleteCompany(int id) {
         Company Company = CompanyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found"));
         CompanyRepository.delete(Company);
