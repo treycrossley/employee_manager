@@ -17,7 +17,7 @@ public class Company {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
-    private int companyId;
+    private Long companyId;
   
     @Column(name = "company_name")
     private String name;
@@ -26,13 +26,16 @@ public class Company {
     private String location;
 
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
+    @JsonManagedReference(value = "company-employees")
     private Set<Employee> employees;
-    /*
-    CREATE TABLE company (
-    company_id SERIAL PRIMARY KEY,
-    company_name VARCHAR(100) NOT NULL,
-    location VARCHAR(100)
-    );
-    */
+
+    @Override
+    public String toString() {
+        return "Company{" +
+                "companyId=" + companyId +
+                ", name='" + name + '\'' +
+                ", location='" + location + '\'' +
+                ", employees=" + employees +
+                '}';
+    }
 }

@@ -14,7 +14,7 @@ public class Employee {
     @Id //makes this a primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="employee_id", updatable = false)
-    private int id;
+    private Long id;
 
     @Column(name = "first_name", nullable = false)
     private String firstName;
@@ -36,8 +36,23 @@ public class Employee {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id", nullable = false)
-    @JsonBackReference
+    @JsonBackReference(value = "company-employees")
     private Company company;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference(value = "user-employee")
+    private User user;
+
+    @Transient
+    private Long companyId; // This is for incoming company ID from JSON
+
+    @PostLoad
+    private void postLoad() {
+        if (company != null) {
+            this.companyId = company.getCompanyId();
+        }
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -15,8 +15,6 @@ public class CompanyController {
     @Autowired
     private CompanyService CompanyService;
 
-    // @param companyService a companyService bean that will be autowired in from the Spring IOC container.
-    @Autowired
     public CompanyController(CompanyService companyService){
         this.CompanyService = companyService;
     }
